@@ -1602,8 +1602,25 @@ const CAT_NAMES = {
   display:'Дисплей', power:'Живлення', sensor:'Сенсори', other:'Інше'
 };
 
-let elements = JSON.parse(localStorage.getItem(STORAGE_KEY)||'null') || defaultElements();
-let timeline = JSON.parse(localStorage.getItem(TL_KEY)||'null') || defaultTimeline();
+let elements = [];
+let timeline = [];
+
+// Підтягуємо дані з data.json при старті
+async function loadFromGitHub() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now()); // ?t= щоб не кешувалось
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    if (data.elements) elements = data.elements;
+    if (data.timeline) timeline = data.timeline;
+  } catch(e) {
+    // Fallback на localStorage якщо немає файлу
+    elements = JSON.parse(localStorage.getItem(STORAGE_KEY)||'null') || defaultElements();
+    timeline = JSON.parse(localStorage.getItem(TL_KEY)||'null') || defaultTimeline();
+  }
+  renderTimeline();
+  renderElements();
+}
 let currentFilter = 'all';
 
 function save(){
@@ -1927,7 +1944,7 @@ setInterval(()=>{
 
 // ══════════ INIT ══════════
 document.addEventListener('DOMContentLoaded',()=>{
-  renderTimeline();
+  loadFromGitHub(); 
   observeAnimations();
   document.getElementById('last-updated').textContent='ОНОВЛЕНО: '+new Date().toLocaleTimeString('uk').toUpperCase();
 });
