@@ -4,7 +4,7 @@
       "name": "Intel Agilex 5E SoC FPGA",
       "part": "A5EA007BB23BE6S",
       "cat": "fpga",
-      "status": "bad",
+      "status": "ok",
       "price": 94,
       "qty": 1,
       "tags": [
@@ -810,5 +810,5 @@
       "done": false
     }
   ],
-  "exported": "2026-06-24T19:51:45.436Z"
+  "exported": "2026-06-24T20:51:54.752Z"
 }
